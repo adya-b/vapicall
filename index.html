@@ -2,16 +2,21 @@
 <html>
   <head><meta charset="utf-8"><title>Screening Call</title></head>
   <body>
+    <h1>Market Analyst Screening</h1>
     <button id="start">Start screening</button>
+    <p id="status"></p>
 
     <script>
       const ASSISTANT_ID   = "0e518834-8969-441a-a215-dc181b2c9f87";
       const PUBLIC_API_KEY = "b0c5c612-2941-48c2-8438-ea8b3845eaf7";
-      const WEBHOOK_URL    = "https://hook.eu2.make.com/lttta6cgk2zg1ilrt1lr32auy7xr7yfx";
+      const WEBHOOK_URL    = "https://hook.eu2.make.com/6fz2majfttrxkm77g5on9ip7wk96587v";
 
       const u = new URL(window.location.href);
       const recId    = u.searchParams.get("rec")  || "";
       const fullName = u.searchParams.get("name") || "";
+
+      document.getElementById("status").textContent =
+        recId ? "Ready" : "Missing record id";
 
       let vapiInstance = null;
       (function (d, t) {
@@ -19,6 +24,7 @@
         g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
         g.defer = true; g.async = true; s.parentNode.insertBefore(g, s);
         g.onload = function () {
+          if (!window.vapiSDK) { document.getElementById("status").textContent = "SDK failed to load"; return; }
           vapiInstance = window.vapiSDK.run({
             apiKey: PUBLIC_API_KEY,
             assistant: ASSISTANT_ID,
