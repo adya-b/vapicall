@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8"><title>Screening Call</title></head>
+  <body>
+    <button id="start">Start screening</button>
+
+    <script>
+      const ASSISTANT_ID   = "0e518834-8969-441a-a215-dc181b2c9f87";
+      const PUBLIC_API_KEY = "b0c5c612-2941-48c2-8438-ea8b3845eaf7";
+      const WEBHOOK_URL    = "https://hook.eu2.make.com/lttta6cgk2zg1ilrt1lr32auy7xr7yfx";
+
+      const u = new URL(window.location.href);
+      const recId    = u.searchParams.get("rec")  || "";
+      const fullName = u.searchParams.get("name") || "";
+
+      let vapiInstance = null;
+      (function (d, t) {
+        const g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+        g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+        g.defer = true; g.async = true; s.parentNode.insertBefore(g, s);
+        g.onload = function () {
+          vapiInstance = window.vapiSDK.run({
+            apiKey: PUBLIC_API_KEY,
+            assistant: ASSISTANT_ID,
+            serverUrl: WEBHOOK_URL,
+            metadata: { airtableRecordId: recId, candidateName: fullName, webhookUrl: WEBHOOK_URL },
+            config: { position: "hidden" }
+          });
+          document.getElementById("start").onclick = () => vapiInstance.start();
+        };
+      })(document, "script");
+    </script>
+  </body>
+</html>
